@@ -34,6 +34,11 @@ This document provides a chronological, end-to-end audit trail of all prompts re
 │  Phase 13: Full Hotel Competitor SEO Research & Intelligence Suite (docs/seo-research)│
 │  Phase 14: Competitor Live Scraping & Positive Keyword Analysis (Satya & Grand Agastya)│
 │  Phase 15: Master Next.js Website Design Strategy & Technical Blueprint               │
+│  Phase 16: Next.js Foundation & Technical SEO Baseline (Phase 1)                      │
+│  Phase 17: Design System, Shared Layout & Responsive UI (Phase 2)                     │
+│  Phase 18: Homepage & Accommodation Pages (Phase 3)                                   │
+│  Phase 19: Remaining Website Pages & Technical SEO (Phase 4)                          │
+│  Phase 20: Supabase PostgreSQL, Drizzle ORM, Authentication & Booking Enquiries (Phase 5)│
 └───────────────────────────────────────────────────────────────────────────────────────┘
 ```
 
@@ -339,6 +344,42 @@ This document provides a chronological, end-to-end audit trail of all prompts re
   * SEO & Sitemap: Updated `src/app/sitemap.ts` to include all 24 public routes with daily, weekly, and monthly change frequencies.
   * Production Quality Audit: Ran `npm run lint` (0 errors, 0 warnings), `npm run build` (30/30 static pages prerendered in 561ms), and 26/26 live HTTP route tests returning 200 OK.
   * Authored Phase 4 docs: `PHASE-4-SEO-PAGES.md`, `PHASE-4-SEO-REPORT.md`, and `PHASE-4-TEST-REPORT.md`.
+
+---
+
+### Phase 20: Supabase PostgreSQL, Drizzle ORM, Authentication & Booking Enquiries (Phase 5)
+* **User Request:**
+  > *"continue next step that is required"* (Executing Phase 5 — Supabase PostgreSQL, Drizzle ORM, Authentication & Persistent Booking Enquiries from `docs/prompt-phase-by-phase/p5.md`).
+* **Features Implemented:**
+  * **Drizzle ORM & Modular Database Schema:**
+    * Defined 4 modular tables in `src/lib/db/schema/`:
+      1. `user_profiles`: Associated with Supabase `auth.users(id)` with roles (`super_admin`, `admin`, `manager`, `staff`) and account status (`active`, `suspended`, `pending_verification`).
+      2. `accommodation_types`: Separates accommodation categories from physical room inventory with slugs, base rates, and pricing periods.
+      3. `booking_enquiries`: Persistent storage with unique reference codes (`ENQ-2026-XXXXXX`), customer contact details, dates, guest counts, staff assignment, and internal notes.
+      4. `audit_logs`: Tamper-evident ledger tracking administrative actions without storing passwords or PII.
+    * Generated version-controlled migration: `drizzle/0000_huge_triton.sql`.
+    * Authored production Row-Level Security script: `drizzle/rls_policies.sql`.
+    * Implemented safe, repeatable, idempotent seed script: `src/lib/db/seed.ts`.
+  * **Database Connection & Graceful Fallback:**
+    * Connection pooling in `src/lib/db/index.ts` with disabled prefetch for Supabase transaction mode (port 6543).
+    * Built in-memory fallback repository enabling 100% functionality and testability when external credentials are not yet configured in local development.
+  * **Authentication & Role-Based Permissions (RBAC):**
+    * Supabase SSR cookie integration in `src/lib/supabase/client.ts` and `src/lib/supabase/server.ts`.
+    * Server-side session helpers in `src/lib/auth/session.ts` (`getAuthUser()`, `getUserProfile()`, `requireUser()`, `requireRole()`).
+    * Role hierarchy and privilege escalation guards in `src/lib/permissions/roles.ts` (`hasRequiredRole()`, `isStaffMember()`, `canAssignRole()`).
+  * **Zod Validation & Route Handler:**
+    * Strict schema validation in `src/lib/validations/booking-enquiry.ts` enforcing Indian phone normalization, check-out after check-in, guest counts (1-20), sanitized text fields, and rejection of privileged fields.
+    * Route handler `POST /api/booking-enquiries`: payload size limit (16KB), sliding-window IP rate limiter (10 req / 10 min), server-generated reference code, sanitized error responses, and clear non-reservation notice.
+  * **Connected Booking UI:**
+    * Upgraded `src/components/booking/BookingForm.tsx` with animated submitting spinner, field-level error messages, duplicate submission prevention, accessible alerts, and success card with one-click reference code copy and direct WhatsApp confirmation.
+  * **Automated Verification:**
+    * Authored comprehensive test suite `tests/phase5.test.ts` executing 42 automated unit and integration tests (100% pass rate).
+    * Verified `npm run lint` (0 errors, 0 warnings) and `npm run build` (31 static pages prerendered in 524ms, dynamic route handler `/api/booking-enquiries` server-rendered on demand).
+  * **Phase 5 Deliverables in `docs/development/`:**
+    * `PHASE-5-DATABASE-AND-AUTH.md`
+    * `PHASE-5-SECURITY-REVIEW.md`
+    * `PHASE-5-TEST-REPORT.md`
+    * `PHASE-5-SETUP-GUIDE.md`
 
 ## 🚀 Further Improvements That Can Be Made (Future Roadmap)
 
