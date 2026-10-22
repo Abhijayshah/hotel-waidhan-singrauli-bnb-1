@@ -40,6 +40,7 @@ This document provides a chronological, end-to-end audit trail of all prompts re
 │  Phase 19: Remaining Website Pages & Technical SEO (Phase 4)                          │
 │  Phase 20: Supabase PostgreSQL, Drizzle ORM, Authentication & Booking Enquiries (Phase 5)│
 │  Phase 21: Admin Dashboard, Enquiry Management & Role-Based Staff Interface (Phase 6) │
+│  Phase 22: Booking Workflow, Notifications & Reservation Confirmation (Phase 7)    │
 └───────────────────────────────────────────────────────────────────────────────────────┘
 ```
 
@@ -421,6 +422,45 @@ This document provides a chronological, end-to-end audit trail of all prompts re
     * `PHASE-6-RBAC-MATRIX.md`
     * `PHASE-6-SECURITY-REVIEW.md`
     * `PHASE-6-TEST-REPORT.md`
+
+---
+
+### Phase 22: Booking Workflow, Notifications & Reservation Confirmation (Phase 7)
+* **User Request:**
+  > *"continue next step that is required"* (Executing Phase 7 — Booking Workflow, Notifications & Reservation Confirmation from `docs/prompt-phase-by-phase/p7.md`).
+* **Features Implemented:**
+  * **Enquiry-First Booking Lifecycle & State Machine:**
+    * Implemented canonical 6-state lifecycle in `src/lib/workflow/state-machine.ts`: `new` -> `contacted` -> `pending_confirmation` -> `confirmed` -> `completed` (with `cancelled` branch).
+    * Enforced server-side transition validation rejecting illegal status leaps (e.g., `new` directly to `confirmed` or `completed`).
+    * Consequential status transitions (`confirmed`, `cancelled`, `completed`) strictly enforce `manager` role or higher; re-opening a cancelled request requires `admin` role.
+    * Implemented optimistic concurrency control (`expectedUpdatedAt` validation) preventing concurrent overwrites between multiple staff members.
+  * **Transactional Outbox Notification Architecture:**
+    * Created `notification_outbox` schema table with deterministic composite idempotency keys (`idempotencyKey = enq_{id}_{eventType}_{recipientCategory}`).
+    * Implemented provider abstraction in `src/lib/notifications/provider.ts` supporting `ResendEmailProvider` (for verified domains) and `ConsoleMockEmailProvider` (for dev and automated testing).
+    * Bounded retry logic (`maxAttempts = 3`) preventing runaway delivery loops.
+    * Decoupled asynchronous delivery: notification failures or provider network outages never roll back or block public booking enquiry persistence.
+  * **Responsive Email Templates:**
+    * `CustomerEnquiryAcknowledgement`: Explicit non-reservation disclaimer, enquiry reference code, requested room category, dates, guest count, and 24/7 reception contacts.
+    * `StaffNewEnquiryAlert`: Instant lead notification with guest details and one-click link to `/admin/enquiries/[id]`.
+    * `CustomerReservationConfirmed`: Official confirmation notice triggered exclusively upon authorized manager confirmation, featuring check-in guidelines (12 PM check-in, Govt ID required) and hotel directions.
+    * `CustomerReservationCancelled`: Courteous cancellation notice with reception helpline.
+  * **Public Customer Acknowledgement Experience:**
+    * Built accessible `/booking/acknowledgement` utility route with `robots: { index: false, follow: false }` for secure guest reference tracking.
+    * Upgraded `BookingForm.tsx` with one-click reference copy, instant WhatsApp verification link, and full enquiry summary navigation.
+  * **Admin Dashboard Workflow Integration:**
+    * Enhanced `/admin/enquiries/[id]` with a live Transactional Notification Outbox card displaying event types, delivery statuses, attempt counts, and one-click retry for managers (`POST /api/admin/notifications/retry`).
+    * Added confirmation modal safeguarding consequential status changes (`confirmed` / `cancelled`).
+  * **Automated Verification:**
+    * Authored comprehensive test suite `tests/phase7.test.ts` with 25 unit and integration tests (100% pass rate).
+    * Combined test runner (`npm run test`) verified **103/103 tests passing** across Phase 5, Phase 6, and Phase 7.
+    * Verified `npm run lint` (**0 errors, 0 warnings**) and production build (**45/45 routes** prerendered / compiled cleanly with Turbopack and PPR).
+  * **Phase 7 Deliverables in `docs/development/`:**
+    * `PHASE-7-BOOKING-WORKFLOW.md`
+    * `PHASE-7-NOTIFICATION-ARCHITECTURE.md`
+    * `PHASE-7-STATE-TRANSITIONS.md`
+    * `PHASE-7-SECURITY-REVIEW.md`
+    * `PHASE-7-TEST-REPORT.md`
+    * Updated `.env.example` with Resend credentials template.
 
 ---
 
