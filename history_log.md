@@ -39,6 +39,7 @@ This document provides a chronological, end-to-end audit trail of all prompts re
 │  Phase 18: Homepage & Accommodation Pages (Phase 3)                                   │
 │  Phase 19: Remaining Website Pages & Technical SEO (Phase 4)                          │
 │  Phase 20: Supabase PostgreSQL, Drizzle ORM, Authentication & Booking Enquiries (Phase 5)│
+│  Phase 21: Admin Dashboard, Enquiry Management & Role-Based Staff Interface (Phase 6) │
 └───────────────────────────────────────────────────────────────────────────────────────┘
 ```
 
@@ -380,6 +381,48 @@ This document provides a chronological, end-to-end audit trail of all prompts re
     * `PHASE-5-SECURITY-REVIEW.md`
     * `PHASE-5-TEST-REPORT.md`
     * `PHASE-5-SETUP-GUIDE.md`
+
+### Phase 21: Admin Dashboard, Enquiry Management & Role-Based Staff Interface (Phase 6)
+* **User Request:**
+  > *"continue next step that is required"* (Executing Phase 6 — Admin Dashboard, Enquiry Management & Role-Based Staff Interface from `docs/prompt-phase-by-phase/p6.md`).
+* **Features Implemented:**
+  * **Role-Based Access Control (RBAC) & Service Layer:**
+    * Implemented server-side authorization in `src/lib/admin/service.ts` enforcing role hierarchy: `super_admin` > `admin` > `manager` > `staff`.
+    * Enforced that consequential status transitions (`confirmed`, `cancelled`) strictly require `manager` privilege or higher.
+    * Protected guest PII and internal staff notes from public leakage.
+    * Built in-memory fallback repositories ensuring 100% testability and reliability even prior to production Supabase variable provisioning.
+  * **Protected Admin API Routes:**
+    * `GET /api/admin/metrics`: Truthful operational metrics (total, new, contacted, pending, confirmed, cancelled counts, DB status).
+    * `GET /api/admin/enquiries`: Paginated, searchable, status-filtered enquiry lists with staff assignments.
+    * `GET /api/admin/enquiries/[id]`: Detailed guest profile, dates, requested rooms, notes, and audit timeline.
+    * `PATCH /api/admin/enquiries/[id]`: Status updates with role verification, internal note appending, and staff assignment.
+    * `GET, PATCH /api/admin/accommodations`: Accommodation category editor (base rates, descriptions, publish toggle).
+    * `GET /api/admin/audit-logs`: Chronological audit ledger for administrative events.
+    * `GET, POST, DELETE /api/admin/auth`: Staff credential authentication, active session verification, and secure sign-out.
+  * **Responsive Admin Layout & Components:**
+    * `src/components/admin/AdminSidebar.tsx`: Desktop sidebar & slide-over mobile drawer with active route highlighting.
+    * `src/components/admin/AdminHeader.tsx`: Breadcrumb title, quick direct actions, and staff initial profile badge.
+    * `src/components/admin/StatusBadge.tsx`: Visual color-coded badges for all enquiry statuses.
+    * `src/app/admin/layout.tsx`: Decoupled layout using React Suspense to isolate admin UI from public website header/footer.
+  * **Admin Pages Built:**
+    * `/admin/login`: Clean, accessible staff credentials login with error handling and redirect support.
+    * `/admin`: Overview dashboard with operational metric cards, setup alert, and recent enquiries table.
+    * `/admin/enquiries`: Searchable, filterable, paginated data table with one-click detail navigation.
+    * `/admin/enquiries/[id]`: 2-column detail view with guest information, one-click WhatsApp action, status updater, internal notes, and audit trail.
+    * `/admin/accommodations`: Accommodation catalogue editor with base rates and publish toggle.
+    * `/admin/audit-logs`: Restricted audit trail viewer.
+    * `/admin/settings`: Account profile overview and full RBAC permissions matrix.
+  * **Automated Verification:**
+    * Authored comprehensive test suite `tests/phase6.test.ts` executing 36 automated unit and integration tests (100% pass rate).
+    * Combined test runner (`npm run test`) verified **78/78 tests passing** across Phase 5 and Phase 6.
+    * Verified `npm run lint` (0 errors, 0 warnings) and Next.js 16 production build (**43/43 pages** compiled with Turbopack and PPR).
+  * **Phase 6 Deliverables in `docs/development/`:**
+    * `PHASE-6-ADMIN-DASHBOARD.md`
+    * `PHASE-6-RBAC-MATRIX.md`
+    * `PHASE-6-SECURITY-REVIEW.md`
+    * `PHASE-6-TEST-REPORT.md`
+
+---
 
 ## 🚀 Further Improvements That Can Be Made (Future Roadmap)
 
