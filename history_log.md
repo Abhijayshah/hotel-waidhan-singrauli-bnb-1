@@ -310,6 +310,36 @@ This document provides a chronological, end-to-end audit trail of all prompts re
   * Verified 100% Turbopack build with 12 static prerendered routes (341ms build), zero lint/type errors, and full HTTP 200 OK verification.
   * Authored Phase 3 docs: `PHASE-3-PAGES-AND-CONTENT.md`, `PHASE-3-SEO-CHECKLIST.md`, and `PHASE-3-TEST-REPORT.md`.
 
+---
+
+### Phase 19: Remaining Website Pages & Technical SEO (Phase 4)
+* **User Request:**
+  > *"continue next step that is required"* (Executing Phase 4 — Remaining Website Pages & Technical SEO from `docs/prompt-phase-by-phase/p4.md`).
+* **Features Implemented:**
+  * Implemented all 18 remaining approved public pages, bringing total website pages to **24 production-ready routes**:
+    1. `/pricing`: Transparent room rates, daily comparison table, weekly/monthly discount guidance, and pricing FAQs.
+    2. `/booking`: Interactive booking engine (`BookingForm.tsx`) with client-side date validation (`checkOut > checkIn`), guest counter, prefilled WhatsApp handover, and phone fallback.
+    3. `/corporate-stay`: Tailored B2B landing page for NTPC Vindhyachal, NTPC Shaktinagar, NCL, and Sasan Power contractors with 100 Mbps fiber Wi-Fi, 24/7 power backup, B2B GST tax invoices, and industrial proximity matrix.
+    4. `/location`: Exact address, GPS coordinates (`24.0629752, 82.6300981`), distance matrix, transit guidance, and Google Maps directions link.
+    5. `/dining`: Homestyle pure-vegetarian dining, breakfast timings, room service menu, and monthly PG mess subscription.
+    6. `/gallery`: Categorized accommodation layout blueprints (Deluxe, Standard, Dormitory, PG) with honest photographic disclosures.
+    7. `/amenities`: Deep dive into 8 confirmed hotel amenities (generator backup, fiber Wi-Fi, geysers, RO water, lockers, CCTV) with honest non-available facility disclosures.
+    8. `/reviews`: Strict zero-fake-review policy complying with Google guidelines and direct link to official Google Maps review profile.
+    9. `/faq`: Comprehensive categorized knowledge base with Schema.org `FAQPage` metadata.
+    10. `/about`: Hotel story, hygiene SOPs, local hospitality mission in Singrauli district.
+    11. `/contact`: 24/7 front desk phone dialers, WhatsApp desk, operating hours, full postal NAP, and Google Maps link.
+    12. `/guide/places-to-visit-in-singrauli`: Top-of-funnel travel guide covering ancient rock-cut Mada Caves, Rihand Dam, Rose Garden, and 1-day/2-day itineraries with Schema.org `Article` metadata.
+    13. `/guide/where-to-stay-in-waidhan`: Area comparison comparing Waidhan, Vindhyanagar, and Morwa with accommodation budget expectations and Schema.org `Article` metadata.
+    14. `/guide/how-to-reach-waidhan`: Regional travel logistics covering Singrauli (SGRL) and Chopan (CPU) railway stations, bus routes, airport links, and auto fares with Schema.org `Article` metadata.
+    15. `/privacy-policy`: DPDP Act 2023 & Indian IT Act 2000 compliant privacy policy.
+    16. `/terms`: Transparent terms and conditions of stay, payment modes, quiet hours (10:30 PM - 6:00 AM), and guest conduct.
+    17. `/cancellation-policy`: Transparent 24-hour free cancellation policy, corporate group rules, and refund timelines.
+    18. `/guest-policies`: Mandatory government photo ID rules (Aadhaar, Passport, Voter ID, DL; PAN cards explicitly excluded), check-in/out schedules, and visitor policies.
+  * Enhanced design system: Expanded `Badge.tsx` with `emerald`, `blue`, and `slate` variants.
+  * SEO & Sitemap: Updated `src/app/sitemap.ts` to include all 24 public routes with daily, weekly, and monthly change frequencies.
+  * Production Quality Audit: Ran `npm run lint` (0 errors, 0 warnings), `npm run build` (30/30 static pages prerendered in 561ms), and 26/26 live HTTP route tests returning 200 OK.
+  * Authored Phase 4 docs: `PHASE-4-SEO-PAGES.md`, `PHASE-4-SEO-REPORT.md`, and `PHASE-4-TEST-REPORT.md`.
+
 ## 🚀 Further Improvements That Can Be Made (Future Roadmap)
 
 Here is a curated, prioritized backlog of high-value enhancements for subsequent development sprints:
