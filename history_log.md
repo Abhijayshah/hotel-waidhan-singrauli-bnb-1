@@ -42,6 +42,7 @@ This document provides a chronological, end-to-end audit trail of all prompts re
 │  Phase 21: Admin Dashboard, Enquiry Management & Role-Based Staff Interface (Phase 6) │
 │  Phase 22: Booking Workflow, Notifications & Reservation Confirmation (Phase 7)    │
 │  Phase 23: Production Hardening, Security, Performance & Accessibility (Phase 8)  │
+│  Phase 24: Production Deployment, Custom Domain, Migrations & Monitoring (Phase 9)│
 └───────────────────────────────────────────────────────────────────────────────────────┘
 ```
 
@@ -496,6 +497,40 @@ This document provides a chronological, end-to-end audit trail of all prompts re
     * `PHASE-8-ACCESSIBILITY-REPORT.md`
     * `PHASE-8-DEPLOYMENT-CHECKLIST.md`
     * `PHASE-8-TEST-REPORT.md`
+
+---
+
+### Phase 24: Production Deployment, Custom Domain, Migrations & Monitoring (Phase 9)
+* **User Request:**
+  > *"continue next step that is required"* (Executing Phase 9 — Production Deployment, Custom Domain, Monitoring & Go-Live Verification from `docs/prompt-phase-by-phase/p9.md`).
+* **Features Implemented:**
+  * **Hosting & Platform Assessment:**
+    * Selected **Vercel** as primary serverless runtime candidate (Node.js 20/22 runtime, Turbopack, Partial Prerendering streaming support, regional Mumbai `bom1` execution).
+    * Documented standalone containerized Node.js runtime (`next start` on port 3000 behind reverse proxy) as secondary VPC candidate.
+  * **Environment Configuration & Secret Isolation:**
+    * Validated `.env.example` containing clean template placeholders for client variables (`NEXT_PUBLIC_APP_URL`, `NEXT_PUBLIC_SUPABASE_URL`, `NEXT_PUBLIC_SUPABASE_ANON_KEY`, `NEXT_PUBLIC_HOTEL_PHONE`, `NEXT_PUBLIC_HOTEL_WHATSAPP`) and server-only secrets (`DATABASE_URL`, `SUPABASE_SERVICE_ROLE_KEY`, `RESEND_API_KEY`, `NOTIFICATION_SENDER_EMAIL`, `STAFF_NOTIFICATION_EMAIL`).
+    * Verified `.gitignore` prevents accidental commit of `.env`, `.env.local`, `.env.production` while preserving `.env.example`.
+    * Implemented startup environment validation via Zod schema (`src/lib/validation/env.ts`).
+  * **Supabase Production Migrations & RLS Hardening:**
+    * Created Drizzle migration `drizzle/0001_amazing_toro.sql` defining `notification_outbox` with unique idempotency constraint and relational foreign key constraints.
+    * Extended `drizzle/rls_policies.sql` to enforce row-level security policies across all 5 core production tables (`user_profiles`, `accommodation_types`, `booking_enquiries`, `audit_logs`, `notification_outbox`).
+    * Configured PgBouncer Transaction Pooler port (`6543`) for serverless runtime and Direct Session port (`5432`) for migrations.
+  * **Custom Domain, DNS & SSL Setup:**
+    * Enforced canonical domain `https://hotelwaidhanbnb.com` (Apex) with permanent `301 Moved Permanently` redirect from `https://www.hotelwaidhanbnb.com`.
+    * Documented authoritative DNS records: A record (`76.76.21.21`), CNAME (`cname.vercel-dns.com`), Resend SPF/DKIM records, and DMARC security policy.
+  * **Observability & Safe Health Check Endpoint:**
+    * Verified live `/api/health` Route Handler returning operational diagnostic metadata (`status: "healthy"`, `timestamp`, `uptime`, `database: { status, provider }`, `version`) with zero leakage of connection strings, passwords, or customer PII.
+  * **Automated Quality Gates:**
+    * Enhanced `tests/phase9.test.ts` to 11 comprehensive automated tests covering secrets isolation, domain canon, robots rules, health handler execution, and migration SQL integrity.
+    * Master test runner (`npm run test`) verified **156/156 automated test cases passing (100%)**.
+    * Verified `npm run lint` (**0 errors, 0 warnings**) and production build (**45/45 routes compiled cleanly** in Turbopack).
+  * **Phase 9 Deliverables in `docs/development/`:**
+    * `PHASE-9-DEPLOYMENT-GUIDE.md`
+    * `PHASE-9-ENVIRONMENT-VARIABLES.md`
+    * `PHASE-9-DOMAIN-AND-DNS.md`
+    * `PHASE-9-GO-LIVE-CHECKLIST.md`
+    * `PHASE-9-ROLLBACK-AND-RECOVERY.md`
+    * `PHASE-9-TEST-REPORT.md`
 
 ---
 
