@@ -610,6 +610,10 @@ This document provides a chronological, end-to-end audit trail of all prompts re
   * **Automated Test Expansion:**
     * Extended `tests/phase11.test.ts` with Test Groups 5 & 6 (7 new automated tests).
     * Total passing tests in master test suite: **16/16 in Phase 11**, maintaining **100% pass rate** across all test suites.
+  * **OPT-01 Google Business Profile Review Acceleration:**
+    * Enhanced `src/config/navigation.ts` (`getWhatsAppLink`) to accept a destination phone number parameter (`targetPhone`), enabling staff to message guests directly on WhatsApp.
+    * Added one-tap "Send Google Review Link (WhatsApp)" action in `src/app/admin/enquiries/[id]/page.tsx` for completed enquiries, generating a personalized thank-you message with the official Google Maps review link (`https://maps.app.goo.gl/gz9ZMdWVEUf4wPUc7`).
+    * Added a dedicated Google Review Acceleration prompt card in the admin enquiry detail sidebar when a stay is marked as `completed`.
   * **Zero Lint & Compilation Errors:**
     * `npm run lint`: 0 errors, 0 warnings.
     * `npx tsc --noEmit`: 0 type errors.
