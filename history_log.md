@@ -255,6 +255,61 @@ This document provides a chronological, end-to-end audit trail of all prompts re
 
 ---
 
+---
+
+### Phase 16: Next.js Foundation & Technical SEO Baseline (Phase 1)
+* **User Request:**
+  > *"PHASE 1 — Create a Fresh Next.js Foundation for Hotel Waidhan Singrauli BNB... Create a completely new, production-oriented website... Do not simply convert the old HTML files mechanically, and do not overwrite the existing website."*
+* **Features Implemented:**
+  * Initialized modern standalone Next.js 16.4.2 (App Router, Turbopack, Tailwind CSS v4, TypeScript 5.8) in `hotel-waidhan-singrauli-bnb-nextjs`.
+  * Configured Tailwind CSS v4 design tokens: Deep Navy (`#0b1528`, `#0f172a`), Warm Amber (`#d97706`, `#b45309`), Slate Neutral scale, Emerald accents.
+  * Configured Google Fonts with Next.js font optimization: **Outfit** (display headings) and **Inter** (body text).
+  * Implemented typed site configuration (`src/config/site.ts`) with verified vs reference data flags.
+  * Built SEO infrastructure: `src/lib/seo/metadata.ts`, `src/lib/seo/jsonld.ts`, `src/app/sitemap.ts`, and `src/app/robots.ts`.
+  * Built health check API route (`src/app/api/health/route.ts`).
+  * Created Phase 1 docs: `PHASE-1-FOUNDATION.md`, `PHASE-1-TEST-REPORT.md`, and `OPEN-QUESTIONS.md`.
+
+---
+
+### Phase 17: Design System, Shared Layout & Responsive UI (Phase 2)
+* **User Request:**
+  > *"PHASE 2 — Design System, Shared Layout & Responsive UI... Implement a polished, reusable, production-oriented design system for Hotel Waidhan Singrauli BNB (Comfort Stay & PG)."*
+* **Features Implemented:**
+  * Built core UI atom components in `src/components/ui/`: `Button.tsx`, `Card.tsx`, `Badge.tsx`, `Input.tsx`, `Select.tsx`, `Container.tsx`, and `SectionHeading.tsx`.
+  * Built persistent layout components in `src/components/layout/`:
+    * `Header.tsx`: Sticky blur header, desktop navigation, phone/WhatsApp CTA, and mobile hamburger drawer.
+    * `Footer.tsx`: 4-column footer with brand descriptor, quick links, landmark transit distances, contact info, and copyright.
+    * `MobileNav.tsx`: Slide-over drawer with keyboard focus trap, ARIA dialog, and auto-closing route changes.
+    * `ThemeToggle.tsx`: Client-side theme switcher supporting light, dark, and system themes with hydration flicker prevention.
+  * Upgraded Homepage sections in `src/components/home/`: `Hero.tsx`, `AccommodationPreview.tsx`, `TrustPillars.tsx`, and `NearbyTransit.tsx`.
+  * Created Phase 2 docs: `PHASE-2-DESIGN-SYSTEM.md` and `PHASE-2-TEST-REPORT.md`.
+
+---
+
+### Phase 18: Homepage & Accommodation Pages (Phase 3)
+* **User Request:**
+  > *"PHASE 3 — Build the Homepage and Accommodation Pages... Build a polished, responsive, SEO-focused homepage and the five primary accommodation routes for Hotel Waidhan Singrauli BNB."*
+* **Features Implemented:**
+  * Centralized strongly typed accommodation data architecture in `src/types/room.ts` and `src/data/rooms.ts`.
+  * Implemented 6 core customer-facing routes:
+    1. `/` — Homepage (Primary keyword: *Hotel in Waidhan*)
+    2. `/rooms` — Accommodation Catalogue & Comparison Hub (Primary keyword: *Affordable rooms in Waidhan Singrauli*)
+    3. `/rooms/deluxe-ac-room` — Deluxe AC Room (Primary keyword: *Deluxe AC room in Waidhan*)
+    4. `/rooms/standard-room` — Standard Non-AC Budget Room (Primary keyword: *Standard room in Waidhan*)
+    5. `/rooms/dormitory` — Single Bunk Dormitory (Primary keyword: *Dormitory in Waidhan Singrauli*)
+    6. `/rooms/pg-rooms` — Monthly PG & Executive Long Stays (Primary keyword: *Rooms for rent in Waidhan*)
+  * Built reusable accommodation components in `src/components/rooms/`:
+    * `Breadcrumbs.tsx` with Schema.org `BreadcrumbList` JSON-LD.
+    * `RoomHero.tsx` with pricing card, category badges, and quick conversion actions.
+    * `RoomSpecsCard.tsx` displaying dimensions, bedding, occupancy, and climate control.
+    * `RoomAmenities.tsx` with verified amenities checklist.
+    * `RoomEnquiryCard.tsx` sticky sidebar enquiry card with client-side date validation (`checkOut > checkIn`) and WhatsApp prefilled handover.
+    * `RoomFaqAccordion.tsx` accessible accordion with Schema.org `FAQPage` schema injection.
+    * `RoomComparisonTable.tsx` side-by-side comparison matrix for `/rooms`.
+    * `RoomDetailView.tsx` master two-column room detail layout with related room suggestions.
+  * Verified 100% Turbopack build with 12 static prerendered routes (341ms build), zero lint/type errors, and full HTTP 200 OK verification.
+  * Authored Phase 3 docs: `PHASE-3-PAGES-AND-CONTENT.md`, `PHASE-3-SEO-CHECKLIST.md`, and `PHASE-3-TEST-REPORT.md`.
+
 ## 🚀 Further Improvements That Can Be Made (Future Roadmap)
 
 Here is a curated, prioritized backlog of high-value enhancements for subsequent development sprints:
