@@ -648,6 +648,40 @@ This document provides a chronological, end-to-end audit trail of all prompts re
 
 ---
 
+### Phase 28: Navigation Brand Alignment, Responsive Button Scaling & Left Floating Social Media Dock
+* **Date:** October 2026
+* **Status:** ✅ Completed, Verified & Browser Tested (100% Pass)
+* **Scope & Objectives:**
+  * Fix navigation brand text alignment and eliminate collision between brand title and descriptor ("Hotel Waidhan Singrauli BNBComfort Stay & PG").
+  * Implement responsive action button sizing: compact on mobile, medium on tablet, and BIG/prominent on desktop.
+  * Prevent desktop navigation link squishing and text wrapping by modernizing breakpoint to `xl:flex`.
+  * Add a floating leftside social media dock (Instagram, YouTube, Facebook) with responsive sizing across all screen sizes.
+  * Integrate social click telemetry with Google Analytics 4 (GA4).
+* **Key Achievements:**
+  * **Brand Monogram Crest & Clean Text Hierarchy (`Header.tsx` & `MobileNav.tsx`):**
+    * Designed an elegant gold monogram crest (`HW BnB`) in a rounded luxury container with gradient shading and subtle ring glow.
+    * Separated the brand title ("Hotel Waidhan") from the descriptor subtitle ("Singrauli BNB • Comfort Stay & PG") with bullet dividers, ensuring zero text collisions or unformatted inline concatenation.
+    * Dynamically adapt subtitle on mobile (`<640px`) to "Singrauli BNB" with zero horizontal overflow, revealing full "Comfort Stay & PG" on tablet and desktop.
+  * **Responsive Button Scaling (Mobile to Desktop):**
+    * **Reserve Room CTA:** Compact (`text-xs px-2.5 py-1.5 rounded-lg`) on mobile, medium (`text-sm px-4 py-2.5 rounded-xl`) on tablet, and BIG (`text-base px-6 py-3.5 font-extrabold shadow-lg rounded-xl`) on desktop.
+    * **WhatsApp CTA:** Integrated responsive sizing with clean icon-plus-label layout on tablet and desktop.
+    * **Desktop 8-Link Navigation:** Shifted desktop link container to `xl:flex` (1280px+), allowing all 8 pages (Home, Rooms & Dorms, Rates & Pricing, Corporate Stays, Location & Transit, Amenities, Gallery, Contact) to render cleanly without line breaks or squishing.
+  * **Floating Leftside Social Media Dock (`FloatingSocialDock.tsx`):**
+    * Mounted a fixed, vertically centered left dock (`fixed left-0 top-1/2 -translate-y-1/2 z-40`) featuring high-precision brand SVGs for YouTube (#FF0000), Instagram (multi-stop sunset gradient), and Facebook (#1877F2).
+    * Scaled responsively: `w-8 h-8` on mobile, `w-10 h-10` on tablet, and `w-11 h-11` on desktop with micro-interaction hover glow and slide-out desktop tooltip labels.
+    * Connected to GA4 custom event tracking (`trackSocialClick(network)`).
+    * Excluded automatically from administrative routes (`/admin/*`).
+  * **Mobile Drawer Enhancement (`MobileNav.tsx`):**
+    * Updated slide-out drawer with matching monogram crest, cleanly aligned brand title/subtitle, official social media channel buttons, and direct booking CTA.
+  * **Quality Assurance & Verification:**
+    * TypeScript (`npx tsc --noEmit`): 0 errors.
+    * ESLint (`npm run lint`): 0 warnings, 0 errors.
+    * Test Suite: **146 / 146 tests passing (100%)** across 7 test suites.
+    * Next.js Turbopack Build: **46 / 46 routes compiled cleanly**.
+    * Live Browser Automation: Tested and recorded at `1440x900` (desktop) and `390x844` (mobile) with zero horizontal overflow and responsive button scaling.
+
+---
+
 ## 🚀 Further Improvements That Can Be Made (Future Roadmap)
 
 Here is a curated, prioritized backlog of high-value enhancements for subsequent development sprints:
