@@ -621,6 +621,33 @@ This document provides a chronological, end-to-end audit trail of all prompts re
 
 ---
 
+### Phase 27: Bilingual Language Switcher (OPT-02) & Enriched Schema.org Local SEO
+* **Date:** October 2026
+* **Status:** ✅ Completed, Verified & Browser Tested (100% Pass)
+* **Scope & Objectives:**
+  * Implement lightweight, zero-bloat bilingual support (`hi/en`) for regional Hindi-speaking guests, transit drivers, and industrial contractors.
+  * Integrate scraped competitor positive keywords ("Ergonomic work area", "Luggage storage", "Running hot water geyser", "Doctor on call") into Schema.org microdata and UI.
+  * Upgrade mobile quick conversion UX with responsive bilingual actions in `MobileBottomBar`.
+* **Key Achievements:**
+  * **Bilingual Translation Engine (`src/lib/i18n/`):**
+    * Built typed translation dictionary (`translations.ts`) with 100% key parity between English and Hindi across all navigation, badges, hero content, CTAs, and quick inquiries.
+    * Implemented modern React 19 `useSyncExternalStore` in `LanguageContext.tsx` ensuring zero cascading renders, cross-tab synchronization, and flawless SSR hydration.
+    * Added sleek pill toggle component (`LanguageToggle.tsx`: `EN | हिंदी`) in the desktop navigation and mobile navigation drawer.
+    * Updated `Hero.tsx`, `Header.tsx`, `MobileNav.tsx`, and `MobileBottomBar.tsx` to reactively render translated strings when Hindi is toggled.
+  * **Enriched Schema.org LodgingBusiness Microdata (`src/lib/seo/jsonld.ts`):**
+    * Declared `knowsLanguage: ['en', 'hi']` signaling multilingual capability to Google.
+    * Added `OpeningHoursSpecification` (24/7 check-in assistance).
+    * Integrated Google Hotel Rich Actions (`potentialAction: ReserveAction` pointing to canonical `/booking`).
+    * Expanded `amenityFeature` with authentic high-intent amenities (Ergonomic Laptop Work Desk, Luggage Storage / Baggage Hold, 24/7 Running Hot & Cold Water Geyser, Doctor on Call).
+  * **Automated Regression Expansion (`tests/phase11.test.ts`):**
+    * Added Test Group 7 (100% English/Hindi translation key parity).
+    * Added Test Group 8 (Schema.org 24/7 hours, ReserveAction, and positive keyword amenity features).
+    * Total automated test count: **19/19 in Phase 11**, maintaining **146/146 PASS (100%)** across all 7 test suites.
+  * **End-to-End Browser Testing via Browser Subagent:**
+    * Tested live on `http://localhost:3006/`. Clicked `हिंदी`, verified immediate translation of hero heading ("साफ, सुरक्षित व सबसे किफायती होटल बैढ़न सिंगरौली") and navigation links without layout shifting. Clicked `EN` to return to English. Opened Pooja Sharma concierge dialog with zero visual collisions.
+
+---
+
 ## 🚀 Further Improvements That Can Be Made (Future Roadmap)
 
 Here is a curated, prioritized backlog of high-value enhancements for subsequent development sprints:
